@@ -24,6 +24,11 @@ div.dataTables_filter {
     text-align: left !important;
 }
 
+.bg-global-primary {
+    background-color: #2C3E50 !important;
+    color: white !important;
+}
+  
 .globalFont {
     font-family: 'Montserrat';
     font-style: normal;
@@ -46,7 +51,7 @@ div.dataTables_filter {
 }
 
 .btn-primary {
-    background: #1B517E !important;
+    background: #2C3E50 !important;
     border-radius: 8px !important;
     border-color: none;
     display: flex !important;
@@ -55,10 +60,6 @@ div.dataTables_filter {
     align-items: center !important;
     padding: 8px 16px !important;
     position: static !important;
-    width: 107px !important;
-    height: 40px !important;
-    left: 1045px !important;
-    top: 16px !important;
     color: #FFFFFF !important;
     border-color: #FFFFFF !important;
 }

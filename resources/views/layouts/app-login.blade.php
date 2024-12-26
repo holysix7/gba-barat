@@ -12,7 +12,7 @@
             @include('layouts.flash-message')
             <div class="d-flex justify-content-center">
               <div class="row">
-                <img src="{{asset('images/LogoLogin.png')}}">
+                {{-- <img src="{{asset('images/LogoLogin.png')}}"> --}}
               </div>
             </div>
             <div class="column d-flex justify-content-center" style="padding-top: 10px; padding-bottom: 20px;">

@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'pgsql'),
+    'default' => env('DB_CONNECTION', 'mysql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -90,11 +90,6 @@ return [
             'prefix' => '',
             'prefix_indexes' => true,
         ],
-        'mongodb' => [
-            'driver' => 'mongodb',
-            'dsn' => env('DB_URI', 'mongodb+srv://akhdani:w2e3r4t5@cluster0-kpsoi.gcp.mongodb.net/?retryWrites=true&w=majority'),
-            'database' => 'jmto'
-            ]
         /*
         'mongodb' => [
             'driver'    => 'mongodb',

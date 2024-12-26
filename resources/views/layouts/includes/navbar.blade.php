@@ -12,7 +12,7 @@
         <i class="fa fa-angle-down  "></i>
       </a>
       <div class="dropdown-menu dropdown-menu-sm dropdown-menu-right" style="background: #ffffff !important;">
-        <span class="d-flex" style="padding-left: 15px;">{{ ucwords(Session::get('role')->name) }}</span>
+        <span class="d-flex" style="padding-left: 15px;">{{ ucwords(Session::get('user')->name) }}</span>
         <span class="d-flex" style="padding-left: 15px;">{{ ucwords(strtolower(Session::get('user')->namaCabang)) }}</span>
         <span class="d-flex" style="padding-left: 15px;">{{ ucwords(strtolower(Session::get('user')->kodeCabang)) }}</span>
         <hr>

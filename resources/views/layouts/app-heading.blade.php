@@ -3,9 +3,9 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   {{-- {{dd(request()->segment(1))}} --}}
   @if(request()->segment(1) == 'change-password')
-  <title>BJB Tanda Mata | Change Password</title>
+  <title>GBA Barat RW 14 | Change Password</title>
   @else
-  <title>BJB Tanda Mata | Login</title>
+  <title>GBA Barat RW 14 | Login</title>
   @endif
   <meta content="" name="description">
   <meta content="" name="keywords">
@@ -15,7 +15,7 @@
   {{-- <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'>
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"> --}}
-  <link rel="icon" type="image/x-icon" href="{{ asset('images/LogoBJB.png') }}">
+  <link rel="icon" type="image/x-icon" href="{{ asset('images/Rw14.png') }}">
 
 
   <!-- Vendor CSS Files -->
