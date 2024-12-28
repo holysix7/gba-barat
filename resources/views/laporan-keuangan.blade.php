@@ -33,6 +33,7 @@
             <div class="container-fluid">
               <div class="row d-flex justify-content-center">
                 <div class="col-12">
+                  {{-- <h3>Saldo RW saat ini: {{ $saldo }}</h3> --}}
                   <table id="fikri-request" class="table table-bordered table-striped">
                   </table>
                 </div>
@@ -50,7 +51,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="titleId">
-          Export Data Warga
+          Export Laporan Keuangan
         </h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -141,45 +142,32 @@
             data: 'no'
           },
           {
-            title: "RT",
-            data: 'rt',
+            title: "Tanggal",
+            data: 'tanggal',
             width: "10%"
           },
           {
-            title: "Nomor Kartu Keluarga",
-            data: 'no_kk',
-            width: "15%"
-          },
-          {
-            title: "Kepala Keluarga",
-            data: 'kepala_keluarga',
-            width: "10%"
-          },
-          {
-            title: "Nama Lengkap",
+            title: "Deskripsi",
             data: 'name',
-            width: "10%"
+            width: "30%"
           },
           {
-            title: "Tanggal Lahir",
-            data: 'tgl_lahir',
-            width: "10%"
+            title: "Debit",
+            data: 'debit',
+            width: "15%",
+            className: 'text-right'
           },
           {
-            title: "Jenis Kelamin",
-            data: "jenis_kelamin",
-            width: "10%"
+            title: "Kredit",
+            data: 'kredit',
+            width: "15%",
+            className: 'text-right'
           },
           {
-            title: "Alamat",
-            data: "address",
-            width: "15%"
+            title: "Total",
+            data: 'total',
+            className: 'text-right'
           },
-          {
-            title: "Nomor Telepon (WA)",
-            data: 'no_telp',
-            width: "10%"
-          }
         ],
       })
     }

@@ -1,7 +1,8 @@
 <aside class="main-sidebar sidebar-light-primary elevation-4" style="background: #000000BF !important;">
   <!-- Brand Logo -->
-  <div class="brand-link" style="border-bottom: 0 !important;">
-    <span class="brand-text font-weight-bold" style="color: #FFFFFF;">GBA Barat RW 14</span>
+  <div class="brand-link d-flex justify-content-center" style="border-bottom: 0 !important;">
+    {{-- <span class="brand-text font-weight-bold" style="color: #FFFFFF;">GBA Barat RW 14</span> --}}
+    <img src="{{ url('images/logo.jpeg') }}" style="width: 70px; height: 70px">
   </div>
 
   <?php 

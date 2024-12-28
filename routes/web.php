@@ -42,8 +42,8 @@ Route::group(['middleware' => 'checkauth'], function () {
     Route::post('/iuran/get-list', 'IuranController@getList')->name('iuran.get-list');
     Route::post('/iuran/export', 'IuranController@export')->name('iuran.export');
 
-    Route::post('/laporan-keuangan/get-list', 'IuranController@getList')->name('laporan-keuangan.get-list');
-    Route::post('/laporan-keuangan/export', 'IuranController@export')->name('laporan-keuangan.export');
+    Route::post('/laporan-keuangan/get-list', 'LaporanKeuanganController@getList')->name('laporan-keuangan.get-list');
+    Route::post('/laporan-keuangan/export', 'LaporanKeuanganController@export')->name('laporan-keuangan.export');
 
     Route::group(['prefix' => 'rw'], function () {
       Route::get('/data-warga', 'DataWargaController@index')->name('rw-data-warga');
