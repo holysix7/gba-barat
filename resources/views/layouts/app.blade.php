@@ -19,7 +19,7 @@
 <body class="hold-transition sidebar-mini layout-fixed accent-primary">
   <div class="wrapper">
     <div class="preloader flex-column justify-content-center align-items-center">
-      <img class="animation__shake" src="{{ url('images/Rw14.png') }}" alt="JMTOLogo" height="60" width="60">
+      <img class="animation__shake" src="{{ url('images/logo.jpeg') }}" alt="JMTOLogo" height="60" width="60">
     </div>
     <!-- Navbar -->
     @include('layouts.includes.navbar')

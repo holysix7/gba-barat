@@ -13,7 +13,11 @@
 
 <section class="content">
   <div class="container-fluid">
-    @include('content-header')
+    <div class="row">
+      <div class="col-md-6">
+        <h4><b>Dashboard</b></h4>
+      </div>
+    </div>
     <div class="card card-primary card-outline card-outline-tabs col-sm-12">
       <div class="row">
         <div class="card-body col-12">

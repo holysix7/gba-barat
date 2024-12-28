@@ -7,14 +7,14 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class DataWargaController extends Controller
+class IuranController extends Controller
 {
     public function index(){
-        return view('data-warga');
+        return view('iuran');
     }
 
     public function getList(Request $request){
-        $data = User::ajax($request);
+        $data = User::ajax($request, 'kepala_keluarga');
         $response = [
             "draw"              => $request->draw,
             "recordsTotal"      => $data->resCount,
@@ -26,6 +26,6 @@ class DataWargaController extends Controller
     }
 
     public function export(Request $request){
-        return Excel::download(new DataWargaExport($request), 'Data-Warga-'. date("Ymd-his") .'.xlsx');
+        return Excel::download(new DataWargaExport($request), 'Iuran-'. date("Ymd-his") .'.xlsx');
     }
 }

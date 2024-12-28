@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use function PHPUnit\Framework\isEmpty;
+
 class User extends Model
 {
     protected $table        = 'users';
@@ -23,32 +25,135 @@ class User extends Model
         return $this->hasMany(Family::class, 'user_id', 'id');
     }
 
-    public static function getWargaByRt($rt){
-        $warga = self::where('rt', $rt)
-        ->with(['auth.role', 'address', 'families' => function ($query) {
+    public static function getAllWarga($pencarian, $start, $take){
+        $warga = User::with(['auth.role', 'address', 'families' => function ($query) {
             $query->orderBy('tgl_lahir', 'asc');
-        },])
-        ->get();
+        }]);
 
-        $data = [];
+        if(!is_null($pencarian) || !isEmpty($pencarian)){
+            $warga = $warga->where(function ($query) use ($pencarian) {
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($pencarian) . '%'])
+                ->orWhereRaw('rt LIKE ?', ['%'. strtolower($pencarian) .'%']);
+            });
+        }
+        
+        if(!is_null($start) && !is_null($take)){
+            $warga = $warga->skip($start)->take($take);
+        }
+
+        $warga = $warga->get();
+        return self::formatList($warga);
+    }
+
+    public static function ajax($request, $type = null){
+        $rt      = data_get($request, 'rt');
+        if(!is_null($rt) || !isEmpty($rt)){
+            $rt = str_replace('rt', '', $rt);
+        }
+
+        if($rt === 'rw'){
+            $records = self::getAllWarga(data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
+        }else{
+            if($type === 'kepala_keluarga'){
+                $records = self::getKepalaKeluarga($rt, data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
+            }else{
+                $records = self::getWarga($rt, data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
+            }
+        }
+        $result = (object)[
+            'resCount'  => count($records),
+            'records'   => $records
+        ];
+        return $result;
+    }
+
+    public static function getKepalaKeluarga($rt = null, $pencarian = null, $start = null, $take = null){
+        $warga = User::with(['auth.role', 'address']);
+
+        if(!is_null($rt) || !isEmpty($rt)){
+            $warga = $warga->where('rt', $rt);
+        }
+
+        if(!is_null($pencarian) || !isEmpty($pencarian)){
+            $warga = $warga->where(function ($query) use ($pencarian) {
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($pencarian) . '%']);
+            });
+        }
+        
+        if(!is_null($start) && !is_null($take)){
+            $warga = $warga->skip($start)->take($take);
+        }
+
+        $warga = $warga->get();
+
+        return self::formatList($warga, false);
+    }
+
+    public static function getWarga($rt = null, $pencarian = null, $start = null, $take = null){
+        $warga = User::with(['auth.role', 'address', 'families' => function ($query) {
+            $query->orderBy('tgl_lahir', 'asc');
+        }]);
+
+        if(!is_null($rt) || !isEmpty($rt)){
+            $warga = $warga->where('rt', $rt);
+        }
+
+        if(!is_null($pencarian) || !isEmpty($pencarian)){
+            $warga = $warga->where(function ($query) use ($pencarian) {
+                $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($pencarian) . '%']);
+            });
+        }
+        
+        if(!is_null($start) && !is_null($take)){
+            $warga = $warga->skip($start)->take($take);
+        }
+
+        $warga = $warga->get();
+
+        $has_family = true;
+        if($warga->isEmpty()){
+            $has_family = false;
+            $warga = Family::whereRaw('LOWER(name) LIKE ?', ['%'. $pencarian .'%']);
+            if(!is_null($start) && !is_null($take)){
+                $warga = $warga->skip($start)->take($take);
+            }
+            $warga = $warga->get();
+        }
+
+        return self::formatList($warga, $has_family);
+    }
+
+    public static function formatList($warga, $has_family = true){
+        $data   = [];
+        $no     = 1;
         foreach($warga as $row){
-            $data_rt = [
-                'name' => $row->name,
-                'no_telp' => $row->no_telp,
-                'tgl_lahir' => $row->tgl_lahir,
-                'jenis_kelamin' => $row->jenis_kelamin,
-                'address' => $row->address
+            $data[] = [
+                'no'              => $no,
+                'rt'              => $row->rt,
+                'no_kk'           => $row->no_kk,
+                'kepala_keluarga' => $row->kepala_keluarga ? true : '',
+                'name'            => $row->name,
+                'tgl_lahir'       => $row->tgl_lahir,
+                'jenis_kelamin'   => $row->jenis_kelamin,
+                'address'         => data_get($row, 'address.name', data_get($row, 'user.address.name')),
+                'no_telp'         => $row->no_telp,
             ];
-            array_push($data, $data_rt);
-            foreach($row->families as $family){
-                $data_keluarga = [
-                    'name' => $family->name,
-                    'no_telp' => $family->no_telp,
-                    'tgl_lahir' => $family->tgl_lahir,
-                    'jenis_kelamin' => $family->jenis_kelamin,
-                    'address' => $row->address
-                ];
-                array_push($data, $data_keluarga);
+            $no++;
+            if($has_family && !is_null(data_get($row, 'families'))){
+                foreach($row->families as $family){
+                    $data[] = [
+                        'no'              => $no,
+                        'rt'              => $row->rt,
+                        'no_kk'           => $row->no_kk,
+                        'kepala_keluarga' => $family->kepala_keluarga ? true : '',
+                        'name'            => $family->name,
+                        'tgl_lahir'       => $family->tgl_lahir,
+                        'jenis_kelamin'   => $family->jenis_kelamin,
+                        'address'         => data_get($row, 'address.name', data_get($row, 'user.address.name')),
+                        'no_telp'         => $family->no_telp,
+                    ];                
+                    $no++;
+                }
             }
         }
         return $data;

@@ -36,8 +36,39 @@ Route::group(['middleware' => 'checkauth'], function () {
       Route::get('/data-warga', 'DataWargaController@index')->name('rt5-data-warga');
     });
 
+    Route::post('/data-warga/get-list', 'DataWargaController@getList')->name('data-warga.get-list');
+    Route::post('/data-warga/export', 'DataWargaController@export')->name('data-warga.export');
+
+    Route::post('/iuran/get-list', 'IuranController@getList')->name('iuran.get-list');
+    Route::post('/iuran/export', 'IuranController@export')->name('iuran.export');
+
+    Route::post('/laporan-keuangan/get-list', 'IuranController@getList')->name('laporan-keuangan.get-list');
+    Route::post('/laporan-keuangan/export', 'IuranController@export')->name('laporan-keuangan.export');
+
+    Route::group(['prefix' => 'rw'], function () {
+      Route::get('/data-warga', 'DataWargaController@index')->name('rw-data-warga');
+      Route::get('/iuran', 'IuranController@index')->name('rw-iuran');
+      Route::get('/laporan-keuangan', 'LaporanKeuanganController@index')->name('rw-laporan-keuangan');
+    });
     Route::group(['prefix' => 'rt01'], function () {
+      Route::get('/data-warga', 'DataWargaController@index')->name('rt1-data-warga');
+      Route::get('/iuran', 'IuranController@index')->name('rt1-iuran');
+    });
+    Route::group(['prefix' => 'rt02'], function () {
+      Route::get('/data-warga', 'DataWargaController@index')->name('rt2-data-warga');
+      Route::get('/iuran', 'IuranController@index')->name('rt2-iuran');
+    });
+    Route::group(['prefix' => 'rt03'], function () {
+      Route::get('/data-warga', 'DataWargaController@index')->name('rt3-data-warga');
+      Route::get('/iuran', 'IuranController@index')->name('rt3-iuran');
+    });
+    Route::group(['prefix' => 'rt04'], function () {
+      Route::get('/data-warga', 'DataWargaController@index')->name('rt4-data-warga');
+      Route::get('/iuran', 'IuranController@index')->name('rt4-iuran');
+    });
+    Route::group(['prefix' => 'rt05'], function () {
       Route::get('/data-warga', 'DataWargaController@index')->name('rt5-data-warga');
+      Route::get('/iuran', 'IuranController@index')->name('rt5-iuran');
     });
 
     Route::get('/tidak-punya-akses/{name}/{msg}', 'DashboardController@haventPermission')->name('havent-permission');

@@ -15,7 +15,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col-md-6">
-        <h4><b>Data Warga {{ strtoupper(request()->segment(1)) }}</b></h4>
+        <h4><b>Iuran {{ strtoupper(request()->segment(1)) }}</b></h4>
       </div>
     </div>
     <div class="card card-primary card-outline card-outline-tabs col-sm-12">
@@ -23,7 +23,7 @@
         <div class="col-sm-12 d-flex justify-content-end">
           <button type="submit" class="btn btn-success btn-template-tambah" id="buttonExport">
             <i class="mdi mdi-export"></i>
-            Export Data Warga
+            Export Iuran
           </button>
         </div>
       </div>
@@ -57,7 +57,7 @@
         </button>
       </div>
       <div class="modal-body">
-        <form action="{{ route('data-warga.export') }}" enctype="multipart/form-data" method="POST">
+        <form action="{{ route('iuran.export') }}" enctype="multipart/form-data" method="POST">
           @csrf
           <div class="row justify-content-center">
             <div class="col-sm-12">
@@ -109,7 +109,7 @@
       var table = $('#fikri-request').DataTable({
         serverSide: true,
         ajax: {
-          url: "{{ route('data-warga.get-list') }}",
+          url: "{{ route('iuran.get-list') }}",
           type: 'POST',
           data: {
             _token: $('meta[name="csrf-token"]').attr('content'),

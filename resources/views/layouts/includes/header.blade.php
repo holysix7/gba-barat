@@ -3,7 +3,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>GBA Barat RW 14</title>
-    <link rel="icon" type="image/x-icon" href="{{ url('images/Rw14.png') }}">
+    <link rel="icon" type="image/x-icon" href="{{ url('images/logo.jpeg') }}">
     {{-- <link href='http://fonts.googleapis.com/css?family=Lato:400,700' rel='stylesheet' type='text/css'> --}}
     <link href="{{ url('font-googleapis.css') }}" rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables-responsive/css/responsive.bootstrap4.min.css') }}">

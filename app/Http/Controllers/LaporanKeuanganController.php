@@ -7,10 +7,10 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
-class DataWargaController extends Controller
+class LaporanKeuanganController extends Controller
 {
     public function index(){
-        return view('data-warga');
+        return view('laporan-keuangan');
     }
 
     public function getList(Request $request){
@@ -26,6 +26,6 @@ class DataWargaController extends Controller
     }
 
     public function export(Request $request){
-        return Excel::download(new DataWargaExport($request), 'Data-Warga-'. date("Ymd-his") .'.xlsx');
+        return Excel::download(new DataWargaExport($request), 'Laporan-Keuangan-'. date("Ymd-his") .'.xlsx');
     }
 }
