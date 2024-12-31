@@ -64,6 +64,20 @@ div.dataTables_filter {
     border-color: #FFFFFF !important;
 }
 
+.bg-success-status {
+    background-color: green;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
+.bg-danger-status {
+    background-color: red;
+    color: white;
+    padding: 5px;
+    border-radius: 5px;
+}
+
 .btn-simulasi {
     background: none !important;
     border-radius: 8px !important;

@@ -11,6 +11,59 @@
 <link rel="stylesheet" href="{{ url('adminlte/plugins/datatables-buttons/css/buttons.bootstrap4.min.css') }}">
 @endsection
 
+<?php 
+  $bulan = [
+    [
+      'name'  => 'Januari',
+      'value' => '1'
+    ],
+    [
+      'name'  => 'Februari',
+      'value' => '2'
+    ],
+    [
+      'name'  => 'Maret',
+      'value' => '3'
+    ],
+    [
+      'name'  => 'April',
+      'value' => '4'
+    ],
+    [
+      'name'  => 'Mei',
+      'value' => '5'
+    ],
+    [
+      'name'  => 'Juni',
+      'value' => '6'
+    ],
+    [
+      'name'  => 'Juli',
+      'value' => '7'
+    ],
+    [
+      'name'  => 'Agustus',
+      'value' => '8'
+    ],
+    [
+      'name'  => 'September',
+      'value' => '9'
+    ],
+    [
+      'name'  => 'Oktober',
+      'value' => '10'
+    ],
+    [
+      'name'  => 'November',
+      'value' => '11'
+    ],
+    [
+      'name'  => 'Desember',
+      'value' => '12'
+    ],
+  ]
+?>
+
 <section class="content">
   <div class="container-fluid">
     <div class="row">
@@ -31,10 +84,41 @@
         <div class="card-body col-12">
           <section class="content">
             <div class="container-fluid">
+              <div class="row" style="padding-bottom: 8px;">
+                <div class="col-sm-4">
+                  <label>Pilih Periode</label>
+                  <select class="form-control" value="{{ $month }}">
+                    @foreach($bulan as $row)
+                      <option value="{{ $row['value'] }}" {{ $row['value'] === $month ? 'selected' : ''}}>{{ $row['name'] }}</option>
+                    @endforeach
+                  </select>
+                </div>
+              </div>
               <div class="row d-flex justify-content-center">
                 <div class="col-12">
                   <table id="fikri-request" class="table table-bordered table-striped">
                   </table>
+                  {{-- <table id="fikri" class="table table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th>No</th>
+                        <th>RT</th>
+                        <th>Status Pembayaran</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>1</td>
+                        <td>RT 01</td>
+                        <td><span style="background: green; color: black;">Sudah Bayar</span></td>
+                      </tr>
+                      <tr>
+                        <td>2</td>
+                        <td>RT 02</td>
+                        <td><span style="background: red; color: black;">Belum Bayar</span></td>
+                      </tr>
+                    </tbody>
+                  </table> --}}
                 </div>
               </div>
             </div>
@@ -50,7 +134,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="titleId">
-          Export Data Warga
+          Export Iuran
         </h4>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -146,40 +230,14 @@
             width: "10%"
           },
           {
-            title: "Nomor Kartu Keluarga",
-            data: 'no_kk',
+            title: "Ketua RT",
+            data: 'ketua_rt',
+          },
+          {
+            title: "Status Pembayaran",
+            data: 'status_bayar',
             width: "15%"
           },
-          {
-            title: "Kepala Keluarga",
-            data: 'kepala_keluarga',
-            width: "10%"
-          },
-          {
-            title: "Nama Lengkap",
-            data: 'name',
-            width: "10%"
-          },
-          {
-            title: "Tanggal Lahir",
-            data: 'tgl_lahir',
-            width: "10%"
-          },
-          {
-            title: "Jenis Kelamin",
-            data: "jenis_kelamin",
-            width: "10%"
-          },
-          {
-            title: "Alamat",
-            data: "address",
-            width: "15%"
-          },
-          {
-            title: "Nomor Telepon (WA)",
-            data: 'no_telp',
-            width: "10%"
-          }
         ],
       })
     }

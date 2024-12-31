@@ -153,22 +153,28 @@
           {
             title: "Kepala Keluarga",
             data: 'kepala_keluarga',
-            width: "10%"
+            width: "10%",
+            mRender: function(data, type, row) {
+              var html = `<span class="bg-danger-status" title='Kepala Keluarga'>False</a>`;
+              if(row.kepala_keluarga){
+                html = `<span class="bg-success-status" title='Kepala Keluarga'>True</a>`;
+              }
+              return html;
+            }
           },
           {
             title: "Nama Lengkap",
             data: 'name',
-            width: "10%"
           },
           {
             title: "Tanggal Lahir",
             data: 'tgl_lahir',
-            width: "10%"
+            width: "8%"
           },
           {
             title: "Jenis Kelamin",
             data: "jenis_kelamin",
-            width: "10%"
+            width: "8%"
           },
           {
             title: "Alamat",
@@ -178,7 +184,7 @@
           {
             title: "Nomor Telepon (WA)",
             data: 'no_telp',
-            width: "10%"
+            width: "8%"
           }
         ],
       })

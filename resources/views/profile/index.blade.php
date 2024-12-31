@@ -2,9 +2,9 @@
   <div class="card card-primary card-outline">
     <div class="card-body box-profile">
       <div class="text-center">
-        <img class="profile-user-img img-fluid img-circle"
+        {{-- <img class="profile-user-img img-fluid img-circle"
              src="{{ url('images/no_file.png') }}"
-             alt="User profile picture">
+             alt="User profile picture"> --}}
       </div>
 
       <h3 class="profile-username text-center">{{ $user->name }}</h3>
@@ -25,7 +25,7 @@
           <b>Jenis Kelamin</b> <span class="float-right">{{ $user->jenis_kelamin }}</span>
         </li>
         <li class="list-group-item">
-          <b>RT</b> <span class="float-right">{{ $user->rt }}</span>
+          <b>RT</b> <span class="float-right">{{ $user->rt->name }}</span>
         </li>
         <li class="list-group-item">
           <b>Alamat</b> <span class="float-right">{{ $user->address->name }}</span>

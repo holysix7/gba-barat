@@ -16,6 +16,10 @@ class User extends Model
     public function auth(){
         return $this->hasOne(Auth::class, 'user_id', 'id');
     }
+
+    public function rt(){
+        return $this->hasOne(Rt::class, 'id', 'rt_id');
+    }
     
     public function address(){
         return $this->hasOne(Address::class, 'id', 'address_id');
@@ -48,9 +52,9 @@ class User extends Model
     public static function ajax($request, $type = null){
         $rt      = data_get($request, 'rt');
         if(!is_null($rt) || !isEmpty($rt)){
-            $rt = str_replace('rt', '', $rt);
+            $rt = str_replace('rt0', '', $rt);
         }
-
+// var_dump($rt); die;
         if($rt === 'rw'){
             $records = self::getAllWarga(data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
         }else{
@@ -71,7 +75,7 @@ class User extends Model
         $warga = User::with(['auth.role', 'address']);
 
         if(!is_null($rt) || !isEmpty($rt)){
-            $warga = $warga->where('rt', $rt);
+            $warga = $warga->where('rt_id', $rt);
         }
 
         if(!is_null($pencarian) || !isEmpty($pencarian)){
@@ -95,7 +99,7 @@ class User extends Model
         }]);
 
         if(!is_null($rt) || !isEmpty($rt)){
-            $warga = $warga->where('rt', $rt);
+            $warga = $warga->where('rt_id', $rt);
         }
 
         if(!is_null($pencarian) || !isEmpty($pencarian)){
@@ -129,28 +133,28 @@ class User extends Model
         foreach($warga as $row){
             $data[] = [
                 'no'              => $no,
-                'rt'              => $row->rt,
+                'rt'              => data_get($row, 'rt.name', data_get($row, 'user.rt.name')),
                 'no_kk'           => $row->no_kk,
-                'kepala_keluarga' => $row->kepala_keluarga ? true : '',
+                'kepala_keluarga' => $row->kepala_keluarga ? true : false,
                 'name'            => $row->name,
-                'tgl_lahir'       => $row->tgl_lahir,
-                'jenis_kelamin'   => $row->jenis_kelamin,
+                'tgl_lahir'       => data_get($row, 'tgl_lahir'),
+                'jenis_kelamin'   => data_get($row, 'jenis_kelamin'),
                 'address'         => data_get($row, 'address.name', data_get($row, 'user.address.name')),
-                'no_telp'         => $row->no_telp,
+                'no_telp'         => data_get($row, 'no_telp'),
             ];
             $no++;
             if($has_family && !is_null(data_get($row, 'families'))){
                 foreach($row->families as $family){
                     $data[] = [
                         'no'              => $no,
-                        'rt'              => $row->rt,
+                        'rt'              => data_get($row, 'rt.name', data_get($row, 'user.rt.name')),
                         'no_kk'           => $row->no_kk,
-                        'kepala_keluarga' => $family->kepala_keluarga ? true : '',
+                        'kepala_keluarga' => $family->kepala_keluarga ? true : false,
                         'name'            => $family->name,
-                        'tgl_lahir'       => $family->tgl_lahir,
-                        'jenis_kelamin'   => $family->jenis_kelamin,
+                        'tgl_lahir'       => data_get($family, 'tgl_lahir'),
+                        'jenis_kelamin'   => data_get($family, 'jenis_kelamin'),
                         'address'         => data_get($row, 'address.name', data_get($row, 'user.address.name')),
-                        'no_telp'         => $family->no_telp,
+                        'no_telp'         => data_get($family, 'no_telp', '-'),
                     ];                
                     $no++;
                 }

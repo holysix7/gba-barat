@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DataWargaExport;
+use App\Models\IuranRt;
+use App\Models\Rt;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -10,11 +12,13 @@ use Maatwebsite\Excel\Facades\Excel;
 class IuranController extends Controller
 {
     public function index(){
-        return view('iuran');
+        $month = date('m');
+        return view('iuran', compact('month'));
     }
 
     public function getList(Request $request){
-        $data = User::ajax($request, 'kepala_keluarga');
+        $data = IuranRt::ajax($request);
+        // $data = Rt::with(['user'])->get();
         $response = [
             "draw"              => $request->draw,
             "recordsTotal"      => $data->resCount,
