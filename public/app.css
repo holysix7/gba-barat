@@ -78,6 +78,21 @@ div.dataTables_filter {
     border-radius: 5px;
 }
 
+.bg-warning-status {
+    background-color: orange;
+    color: black;
+    padding: 5px;
+    border-radius: 5px;
+    text-underline-offset: none;
+}
+
+.link-new {
+    width: 100% !important; 
+    gap: 5px !important; 
+    color: black !important; 
+    text-decoration: none !important;
+}
+
 .btn-simulasi {
     background: none !important;
     border-radius: 8px !important;

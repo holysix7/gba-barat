@@ -14,4 +14,8 @@ class Rt extends Model
     public function user(){
         return $this->hasOne(User::class, 'rt_id', 'id');
     }
+    
+    public function getKetuaRt(){
+        return $this->belongsTo(User::class, 'ketua_rt', 'id');
+    }
 }

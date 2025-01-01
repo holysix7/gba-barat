@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DataWargaExport;
+use App\Http\Traits\GetListTrait;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class DataWargaController extends Controller
 {
+    use GetListTrait;
     public function index(){
-        return view('data-warga');
+        $data = $this->getParams('data-warga');
+        return view('data-warga', compact('data'));
     }
 
     public function getList(Request $request){

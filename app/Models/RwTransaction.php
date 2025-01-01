@@ -51,29 +51,40 @@ class RwTransaction extends Model
         }
     }
 
-    public static function debit($request){
+    protected static function debit($request){
+        $keuangan           = Keuangan::first();
+        $saldo              = $keuangan->saldo + data_get($request, 'nominal', 0);
+        $keuangan->saldo    = $saldo;
+        $keuangan->save();
+
         $rw             = new self();
-        $rw->name       = $request->name;
-        $rw->nominal    = $request->nominal;
+        $rw->name       = data_get($request, 'name');
+        $rw->nominal    = data_get($request, 'nominal', 0);
         $rw->is_debit   = true;
         $rw->is_kredit  = false;
+        $rw->tanggal    = date('Y-m-d');
+        $rw->total      = $saldo;
         $rw->save();
 
-        $keuangan           = Keuangan::first();
-        $keuangan->saldo    = $keuangan->saldo + $request->nominal;
-        $keuangan->save();
+        return $rw;
     }
 
-    public static function kredit($request){
+    protected static function kredit($request){
+        $keuangan           = Keuangan::first();
+        $saldo              = $keuangan->saldo - data_get($request, 'nominal', 0);
+        $keuangan->saldo    = $saldo;
+        $keuangan->save();
+
         $rw             = new self();
-        $rw->name       = $request->name;
-        $rw->nominal    = $request->nominal;
+        $rw->name       = data_get($request, 'name');
+        $rw->nominal    = data_get($request, 'nominal', 0);
         $rw->is_debit   = false;
         $rw->is_kredit  = true;
+        $rw->tanggal    = date('Y-m-d');
+        $rw->total      = $saldo;
         $rw->save();
 
-        $keuangan           = Keuangan::first();
-        $keuangan->saldo    = $keuangan->saldo - $request->nominal;
-        $keuangan->save();
+        return $rw;
+
     }
 }

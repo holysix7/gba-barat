@@ -27,10 +27,10 @@ Route::group(['middleware' => 'checksession'], function () {
 
 Route::group(['middleware' => 'checkauth'], function () {
   Route::group(['middleware' => 'checkpermission'], function(){
-    Route::get('/', 'DashboardController@index')->name('dashboard');
+    Route::get('/', 'TimelineController@index')->name('timeline');
 
     Route::get('/profile', 'ProfileController@index')->name('profile');
-    Route::get('/profile/detail', 'ProfileController@detail')->name('profile-detail');
+    Route::get('/profile/detail', 'ProfileController@detail')->name('profile.detail');
 
     Route::group(['prefix' => 'rt05'], function () {
       Route::get('/data-warga', 'DataWargaController@index')->name('rt5-data-warga');
@@ -42,12 +42,16 @@ Route::group(['middleware' => 'checkauth'], function () {
     Route::post('/iuran/get-list', 'IuranController@getList')->name('iuran.get-list');
     Route::post('/iuran/export', 'IuranController@export')->name('iuran.export');
 
+    Route::post('/iuran-rt/get-list', 'IuranRtController@getList')->name('iuran-rt.get-list');
+    Route::post('/iuran-rt/export', 'IuranRtController@export')->name('iuran-rt.export');
+
     Route::post('/laporan-keuangan/get-list', 'LaporanKeuanganController@getList')->name('laporan-keuangan.get-list');
     Route::post('/laporan-keuangan/export', 'LaporanKeuanganController@export')->name('laporan-keuangan.export');
 
     Route::group(['prefix' => 'rw'], function () {
       Route::get('/data-warga', 'DataWargaController@index')->name('rw-data-warga');
-      Route::get('/iuran', 'IuranController@index')->name('rw-iuran');
+      Route::get('/iuran-rt', 'IuranRtController@index')->name('iuran-rt');
+      Route::post('/iuran-rt', 'IuranRtController@bayar')->name('iuran-rt');
       Route::get('/laporan-keuangan', 'LaporanKeuanganController@index')->name('rw-laporan-keuangan');
     });
     Route::group(['prefix' => 'rt01'], function () {
@@ -71,8 +75,7 @@ Route::group(['middleware' => 'checkauth'], function () {
       Route::get('/iuran', 'IuranController@index')->name('rt5-iuran');
     });
 
-    Route::get('/tidak-punya-akses/{name}/{msg}', 'DashboardController@haventPermission')->name('havent-permission');
-    Route::get('/dashboard', 'DashboardController@index')->name('dashboard');
+    Route::get('/timeline', 'DashboardController@index')->name('timeline');
     Route::post('/dashboard/lsbu', 'DashboardController@lsbu')->name('dashboard.lsbu');
     Route::get('/dashboard/mygoals', 'DashboardController@mygoals')->name('dashboard.mygoals');
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');

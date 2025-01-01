@@ -18,7 +18,7 @@
           ],
           [
             'name'  => 'Iuran RT',
-            'url'   => 'iuran',
+            'url'   => 'iuran-rt',
             'icon'  => 'money-bill'
           ],
           [
@@ -131,15 +131,15 @@
     <!-- Sidebar Menu -->
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-        <li class="nav-item {{ request()->segment(1) == 'profile' ? 'menu-open' : '' }}">
-          <a href="{{ URL::to('/') . '/' . 'dashboard' }}" class="nav-link">
+        <li class="nav-item {{ request()->segment(1) == 'timeline' ? 'menu-open' : '' }}">
+          <a href="{{ URL::to('/') . '/' . 'timeline' }}" class="nav-link">
             <div class="row">
               <div class="col-sm-2">
-                <i class="nav-icon fa fa-database" style="color: {{ request()->segment(1) == 'dashboard' ? '#FFFFFF' : 'grey' }}"></i>
+                <i class="nav-icon fa fa-info" style="color: {{ request()->segment(1) == 'timeline' ? '#FFFFFF' : 'grey' }}"></i>
               </div>
               <div class="col-sm-9">
-                <p style="color: {{ request()->segment(1) == 'dashboard' ? '#FFFFFF' : 'grey' }}">
-                  Dashboard
+                <p style="color: {{ request()->segment(1) == 'timeline' ? '#FFFFFF' : 'grey' }}">
+                  Timeline
                 </p>
               </div>
             </div>
@@ -150,10 +150,10 @@
           <a href="{{ URL::to('/') . '/' . 'profile' }}" class="nav-link">
             <div class="row">
               <div class="col-sm-2">
-                <i class="nav-icon fa fa-user" style="color: {{ request()->segment(1) == 'dkm' ? '#FFFFFF' : 'grey' }}"></i>
+                <i class="nav-icon fa fa-user" style="color: {{ request()->segment(1) == 'profile' ? '#FFFFFF' : 'grey' }}"></i>
               </div>
               <div class="col-sm-9">
-                <p style="color: {{ request()->segment(1) == 'dkm' ? '#FFFFFF' : 'grey' }}">
+                <p style="color: {{ request()->segment(1) == 'profile' ? '#FFFFFF' : 'grey' }}">
                   Profile
                 </p>
               </div>

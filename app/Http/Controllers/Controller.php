@@ -14,10 +14,5 @@ class Controller extends BaseController
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     
     public function __construct(){
-        View::share('records');
-    }
-
-    public function logActivity(Request $request){
-        return userActivities($request->action, $request->description, $request->table, $request->type, $request->route);
     }
 }

@@ -14,11 +14,11 @@ class User extends Model
     use HasFactory;
 
     public function auth(){
-        return $this->hasOne(Auth::class, 'user_id', 'id');
+        return $this->hasOne(Auth::class, 'user_id', 'id')->with(['role']);
     }
 
     public function rt(){
-        return $this->hasOne(Rt::class, 'id', 'rt_id');
+        return $this->belongsTo(Rt::class, 'rt_id', 'id');
     }
     
     public function address(){
@@ -30,23 +30,38 @@ class User extends Model
     }
 
     public static function getAllWarga($pencarian, $start, $take){
-        $warga = User::with(['auth.role', 'address', 'families' => function ($query) {
-            $query->orderBy('tgl_lahir', 'asc');
-        }]);
+        $warga = User::with([
+            'auth.role',
+            'address',
+            'rt',
+            'families' => function ($query) {
+                $query->orderBy('tgl_lahir', 'asc');
+            }
+        ]);
 
         if(!is_null($pencarian) || !isEmpty($pencarian)){
             $warga = $warga->where(function ($query) use ($pencarian) {
                 $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($pencarian) . '%'])
-                ->orWhereRaw('rt LIKE ?', ['%'. strtolower($pencarian) .'%']);
+                    ->orWhereHas('address', function ($q2) use ($pencarian) {
+                        $q2->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($pencarian) . '%']);
+                    })
+                    ->orWhereHas('rt', function ($q2) use ($pencarian) {
+                        $q2->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($pencarian) . '%']);
+                    })
+                    ->orWhereRaw('LOWER(no_telp) LIKE ?', ['%' . strtolower($pencarian) . '%']);
             });
         }
-        
+        $counted_rows = $warga->count();
         if(!is_null($start) && !is_null($take)){
             $warga = $warga->skip($start)->take($take);
         }
 
         $warga = $warga->get();
-        return self::formatList($warga);
+
+        return [
+            'resCount' => $counted_rows,
+            'records' => self::formatList($warga)
+        ];
     }
 
     public static function ajax($request, $type = null){
@@ -54,19 +69,20 @@ class User extends Model
         if(!is_null($rt) || !isEmpty($rt)){
             $rt = str_replace('rt0', '', $rt);
         }
-// var_dump($rt); die;
+
         if($rt === 'rw'){
-            $records = self::getAllWarga(data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
+            $data = self::getAllWarga(data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
         }else{
             if($type === 'kepala_keluarga'){
-                $records = self::getKepalaKeluarga($rt, data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
+                $data = self::getKepalaKeluarga($rt, data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
             }else{
-                $records = self::getWarga($rt, data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
+                $data = self::getWarga($rt, data_get($request, 'search.value'), data_get($request, 'start'), data_get($request, 'length'));
             }
         }
+        // var_dump($data['records']); die;
         $result = (object)[
-            'resCount'  => count($records),
-            'records'   => $records
+            'resCount'  => data_get($data, 'resCount', 0),
+            'records'   => data_get($data, 'records', [])
         ];
         return $result;
     }
@@ -83,14 +99,17 @@ class User extends Model
                 $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($pencarian) . '%']);
             });
         }
-        
+        $counted_rows = $warga->count();
         if(!is_null($start) && !is_null($take)){
             $warga = $warga->skip($start)->take($take);
         }
 
         $warga = $warga->get();
 
-        return self::formatList($warga, false);
+        return [
+            'resCount' => $counted_rows,
+            'records' => self::formatList($warga)
+        ];
     }
 
     public static function getWarga($rt = null, $pencarian = null, $start = null, $take = null){
@@ -107,7 +126,7 @@ class User extends Model
                 $query->whereRaw('LOWER(name) LIKE ?', ['%' . strtolower($pencarian) . '%']);
             });
         }
-        
+        $counted_rows = $warga->count();
         if(!is_null($start) && !is_null($take)){
             $warga = $warga->skip($start)->take($take);
         }
@@ -124,14 +143,17 @@ class User extends Model
             $warga = $warga->get();
         }
 
-        return self::formatList($warga, $has_family);
+        return [
+            'resCount' => $counted_rows,
+            'records' => self::formatList($warga)
+        ];
     }
 
     public static function formatList($warga, $has_family = true){
         $data   = [];
         $no     = 1;
-        foreach($warga as $row){
-            $data[] = [
+        foreach($warga as $index => $row){
+            $data[$index] = [
                 'no'              => $no,
                 'rt'              => data_get($row, 'rt.name', data_get($row, 'user.rt.name')),
                 'no_kk'           => $row->no_kk,
@@ -141,12 +163,14 @@ class User extends Model
                 'jenis_kelamin'   => data_get($row, 'jenis_kelamin'),
                 'address'         => data_get($row, 'address.name', data_get($row, 'user.address.name')),
                 'no_telp'         => data_get($row, 'no_telp'),
+                'families'        => []
             ];
             $no++;
+            $no_families = 1;
             if($has_family && !is_null(data_get($row, 'families'))){
                 foreach($row->families as $family){
-                    $data[] = [
-                        'no'              => $no,
+                    $data[$index]['families'][] = [
+                        'no'              => $no_families,
                         'rt'              => data_get($row, 'rt.name', data_get($row, 'user.rt.name')),
                         'no_kk'           => $row->no_kk,
                         'kepala_keluarga' => $family->kepala_keluarga ? true : false,
@@ -155,8 +179,8 @@ class User extends Model
                         'jenis_kelamin'   => data_get($family, 'jenis_kelamin'),
                         'address'         => data_get($row, 'address.name', data_get($row, 'user.address.name')),
                         'no_telp'         => data_get($family, 'no_telp', '-'),
-                    ];                
-                    $no++;
+                    ];
+                    $no_families++;
                 }
             }
         }

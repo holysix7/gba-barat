@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\DataWargaExport;
+use App\Http\Traits\GetListTrait;
 use App\Models\Keuangan;
 use App\Models\RwTransaction;
 use App\Models\User;
@@ -11,10 +12,10 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class LaporanKeuanganController extends Controller
 {
+    use GetListTrait;
     public function index(){
-        $keuangan   = Keuangan::first();
-        $saldo      = getRupiah($keuangan->saldo); 
-        return view('laporan-keuangan', compact('saldo'));
+        $data = $this->getParams('laporan-keuangan');
+        return view('rw.laporan-keuangan', compact('data'));
     }
 
     public function getList(Request $request){

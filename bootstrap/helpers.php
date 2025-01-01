@@ -31,6 +31,13 @@ if (!function_exists('getRupiah')) {
     }
 }
 
+if (!function_exists('rupiahToNumber')) {
+    function rupiahToNumber($string) {
+        $cleanedString = str_replace(['Rp', '.', ' '], '', $string);
+        return intval($cleanedString);
+    }
+}
+
 if (!function_exists('indonesiaMonths')) {
     function indonesiaMonths()
     {
