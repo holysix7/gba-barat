@@ -33,7 +33,28 @@ trait GetListTrait
   protected function getTimeline(){
     return (object)[
       'menu'      => 'Timeline',
+      'create'    => route('timeline.create'),
       'endpoint'  => route('timeline'),
+      'create_fields' => [
+        [
+          'label' => 'Judul',
+          'name' => 'judul',
+          'type' => 'text',
+          'add_class' => ''
+        ],
+        [
+          'label' => 'Deskripsi',
+          'name' => 'deskripsi',
+          'type' => 'textarea',
+          'add_class' => 'uangMasking'
+        ],
+        [
+          'label' => 'Foto',
+          'name' => 'foto',
+          'type' => 'file',
+          'add_class' => ''
+        ],
+      ],
     ];
   }
 

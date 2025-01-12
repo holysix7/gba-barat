@@ -21,6 +21,7 @@ class CreateInfoWargaTable extends Migration
             $table->boolean('isactive')->default(true);
             $table->string('judul')->nullable();
             $table->text('deskripsi')->nullable();
+            $table->string('foto')->nullable();
         });
     }
 

@@ -240,6 +240,10 @@ function dateFormat($original_date){
     return date("d-m-Y", strtotime($original_date));
 }
 
+function dateTimeFormat($original_date){
+    return date("d-m-Y h:i", strtotime($original_date));
+}
+
 function getUserLogin(){
     $user = session('user');
     return $user;
@@ -252,4 +256,20 @@ function getUserLoginId(){
 
 function formatStringToNominal($value){
     return str_replace('.', '', $value);
+}
+
+function handleUploadFileWithPath($foto, $path){
+    $tanggalUpload = date('Ymd');
+    $namaFile = $foto->getClientOriginalName();
+    $path = "{$path}/{$tanggalUpload}";
+    if (!file_exists(public_path($path))) {
+        mkdir(public_path($path), 0755, true);
+    }
+    
+    $foto_obj = $foto->move(public_path($path), $namaFile);
+
+    return [
+        'path' => implode('/', [$path, $namaFile]),
+        'foto_obj' => $foto_obj
+    ];
 }

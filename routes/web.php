@@ -77,6 +77,7 @@ Route::group(['middleware' => 'checkauth'], function () {
 
     Route::get('/timeline', 'TimelineController@index')->name('timeline');
     Route::post('/timeline', 'TimelineController@getInfoWarga')->name('info-warga');
+    Route::post('/timeline/create', 'TimelineController@create')->name('timeline.create');
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
     
         Route::get('/daftar-rekening', 'Autodebit\MyGoals\DaftarRekeningController@index')->name('autodebit.mygoals.daftar-rekening');

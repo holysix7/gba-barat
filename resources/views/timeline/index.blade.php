@@ -31,11 +31,27 @@
     </div>
   </div>
 
+  <div class="modal fade" id="imageModal" tabindex="-1" aria-labelledby="imageModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="imageModalLabel">Preview Gambar</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body text-center">
+          <img id="modalImage" src="" alt="Preview" class="img-fluid" />
+        </div>
+      </div>
+    </div>
+  </div>
+
 @endsection
 
 @push('script')
   <script type="text/javascript">
-    var nextRequest = 0;
+    var currentPage = 0;
+    var totalPages = 0;
+    var limit = $('#optLimit').val();
     $(document).ready(function(){
       $('#judulPostingan').html('<div class="skeleton-box text-skeleton" style="width: 40%;"></div>')
       $('#info').html('<div class="skeleton-box text-skeleton" style="width: 40%;"></div>')
@@ -44,17 +60,26 @@
       setTimeout(() => {
         ajaxCall()
       }, 500);
-      $('#prevBtn').on('click', function() {
-        const start = $(this).data('start');
-        ajaxCall(start);
+      
+      $('#prevBtn').on('click', function () {
+        currentPage--;
+        ajaxCall(currentPage);
       });
 
-      $('#nextBtn').on('click', function() {
-        ajaxCall(nextRequest);
+      $('#nextBtn').on('click', function () {
+        if (currentPage < totalPages - 1) {
+          currentPage++;
+          ajaxCall(currentPage);
+        }
       });
+      
+      $('#optLimit').on('change', function () {
+        limit = $('#optLimit').val();
+        ajaxCall()
+      })
     })
 
-    function ajaxCall(start = 0){
+    function ajaxCall(page){
       $('#parentInfoWarga').html('')
       $('#judulPostingan').html('<div class="skeleton-box text-skeleton" style="width: 40%;"></div>')
       $('#info').html('<div class="skeleton-box text-skeleton" style="width: 40%;"></div>')
@@ -65,23 +90,31 @@
         type: 'POST',
         data: {
           _token: $('meta[name="csrf-token"]').attr('content'),
-          start: start
+          start: page * limit,
+          limit: limit,
         },
         success: function(response){
           html = ''
           $('#judulPostingan').html('')
           $('#info').html('')
           $('#descId').html('')
-          const { data, prev, next, hasMore} = response
-          nextRequest += next;
+          const { data, counted} = response
+          totalPages = Math.ceil(counted / limit);
+
           for(let i = 0; i < data.length; i++){
             var row = data[i];
             html += `<div class="col-sm-12">
               <div class="card timeline-info-warga">
                 <h4 id="judulPostingan">${row.judul}</h4>
-                <p class="timeline-p" id="info">
-                  (${dateFormat(row.created_at)}) - ${row.user.name}
+                <p class="timeline-p" id="info" data-toggle="tooltip" title="Dibuat Oleh: ${row.user.name}\r\n Pada Tanggal: ${dateTimeFormat(row.created_at)}">
+                  (${dateTimeFormat(row.created_at)}) - ${row.user.name}
                 </p>
+                ${row.foto ? `
+                  <div class="container-timeline-photo">
+                    <img src="${row.foto}" alt="${row.judul}" class="timeline-photo img-fluid" id="${row.id}+${row.foto}" />
+                  </div>
+                  ` : ''
+                }
                 <div id="descId" class="timeline-desc">
                   ${row.deskripsi}
                 </div>
@@ -89,17 +122,15 @@
             </div>`
           }
           $('#parentInfoWarga').html(html)
-          if (prev === 0) {
-            $('#prevBtn').attr('disabled', true);
-          } else {
-            $('#prevBtn').attr('disabled', false);
-          }
-
-          if (!hasMore) {
-            $('#nextBtn').attr('disabled', true);
-          } else {
-            $('#nextBtn').attr('disabled', false);
-          }
+          $('#prevBtn').attr('disabled', currentPage <= 0);
+          $('#nextBtn').attr('disabled', currentPage >= totalPages - 1);
+          $('.timeline-photo').on('click', function () {
+            const imageSrc = $(this).attr('src');
+            const imageAlt = $(this).attr('alt');
+            $('#modalImage').attr('src', imageSrc);
+            $('#imageModalLabel').text(imageAlt);
+            $('#imageModal').modal('show');
+          });
         },
         error: function(xhr, status, thrown){
           alert('Error ajax call: ', xhr, ', ', thrown)

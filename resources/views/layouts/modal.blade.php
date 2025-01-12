@@ -69,7 +69,7 @@
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <form action="{{ $data->create }}" method="POST">
+      <form action="{{ $data->create }}" method="POST" enctype='multipart/form-data'>
         <div class="modal-body" id="containerFormAdd">
           <div class="row container-form" id="readonlyFormAdd">
             @foreach($data->create_fields as $field)
@@ -81,8 +81,12 @@
                     <option value="{{ data_get($option, 'value') }}">{{ data_get($option, 'label') }}</option>
                   @endforeach
                 </select>
+              @elseif($field['type'] === 'textarea')
+                <textarea class="form-control" name="{{ $field['name'] }}" rows="4" placeholder="{{ $field['label'] }}"></textarea>
+              @elseif($field['type'] === 'file')
+                <input type="{{ $field['type'] }}" name="{{ $field['name'] }}" class="form-control {{ $field['add_class'] }}" accept="image/png, image/jpeg">
               @else
-                <input type="{{ $field['type'] }}" name="{{ $field['name'] }}" class="form-control {{ $field['add_class'] }}">
+                <input type="{{ $field['type'] }}" name="{{ $field['name'] }}" class="form-control {{ $field['add_class'] }}" placeholder="{{ $field['label'] }}">
               @endif
               </div>
             @endforeach

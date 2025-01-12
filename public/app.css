@@ -959,3 +959,15 @@ img.lazy {
     display: grid;
     gap: 10px;
 }
+
+.container-timeline-photo {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.timeline-photo {
+    cursor: pointer;
+    width: 250px;
+    height: 250px;
+}
