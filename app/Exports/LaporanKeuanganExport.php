@@ -2,14 +2,14 @@
 
 namespace App\Exports;
 
-use App\Models\IuranRt;
+use App\Models\RwTransaction;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 
-class IuranRtExport implements FromCollection, WithColumnFormatting, WithHeadings, ShouldAutoSize, WithEvents
+class LaporanKeuanganExport implements FromCollection, WithColumnFormatting, WithHeadings, ShouldAutoSize, WithEvents
 {
   private $request; 
 
@@ -22,7 +22,7 @@ class IuranRtExport implements FromCollection, WithColumnFormatting, WithHeading
   }
 
   public function collection(){
-    $data = IuranRt::getExport($this->request);
+    $data = RwTransaction::getExport();
     return collect($data);
   }
 
@@ -33,14 +33,11 @@ class IuranRtExport implements FromCollection, WithColumnFormatting, WithHeading
   public function headings(): array{
     $fields = [
       'No',
-      'Bulan',
-      'Tahun',
-      'RT',
-      'Ketua RT',
+      'Tanggal',
       'Deskripsi',
-      'Tagihan',
-      'Status Bayar',
-      'Tanggal Bayar',
+      'Debit',
+      'Kredit',
+      'Total',
     ];
 
     return $fields;

@@ -91,7 +91,7 @@
     }
 
     function maskingInput(){
-      $( '.uangMasking' ).mask('0.000.000.000.000.000.000.000', {reverse: true});
+      $('.uangMasking').mask('#.##0', { reverse: true });
     }
 
     function validateSymbol(){
@@ -105,6 +105,11 @@
           e.preventDefault();
         }
       })
+    }
+ 
+    function dateFormat(dateString) {
+      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+      return new Date(dateString).toLocaleDateString('id-ID', options);
     }
   </script>
   

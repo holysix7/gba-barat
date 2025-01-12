@@ -37,11 +37,11 @@
             'url'   => 'data-warga',
             'icon'  => 'users'
           ],
-          [
-            'name'  => 'Iuran',
-            'url'   => 'iuran',
-            'icon'  => 'money-bill'
-          ],
+          // [
+          //   'name'  => 'Iuran',
+          //   'url'   => 'iuran',
+          //   'icon'  => 'money-bill'
+          // ],
         ],
       ],
       [
@@ -53,11 +53,11 @@
             'url'   => 'data-warga',
             'icon'  => 'users'
           ],
-          [
-            'name'  => 'Iuran',
-            'url'   => 'iuran',
-            'icon'  => 'money-bill'
-          ],
+          // [
+          //   'name'  => 'Iuran',
+          //   'url'   => 'iuran',
+          //   'icon'  => 'money-bill'
+          // ],
         ],
       ],
       [
@@ -69,11 +69,11 @@
             'url'   => 'data-warga',
             'icon'  => 'users'
           ],
-          [
-            'name'  => 'Iuran',
-            'url'   => 'iuran',
-            'icon'  => 'money-bill'
-          ],
+          // [
+          //   'name'  => 'Iuran',
+          //   'url'   => 'iuran',
+          //   'icon'  => 'money-bill'
+          // ],
         ],
       ],
       [
@@ -85,11 +85,11 @@
             'url'   => 'data-warga',
             'icon'  => 'users'
           ],
-          [
-            'name'  => 'Iuran',
-            'url'   => 'iuran',
-            'icon'  => 'money-bill'
-          ],
+          // [
+          //   'name'  => 'Iuran',
+          //   'url'   => 'iuran',
+          //   'icon'  => 'money-bill'
+          // ],
         ],
       ],
       [
@@ -101,11 +101,11 @@
             'url'   => 'data-warga',
             'icon'  => 'users'
           ],
-          [
-            'name'  => 'Iuran',
-            'url'   => 'iuran',
-            'icon'  => 'money-bill'
-          ],
+          // [
+          //   'name'  => 'Iuran',
+          //   'url'   => 'iuran',
+          //   'icon'  => 'money-bill'
+          // ],
         ],
       ],
       [
@@ -117,11 +117,11 @@
             'url'   => 'data-warga',
             'icon'  => 'users'
           ],
-          [
-            'name'  => 'Iuran',
-            'url'   => 'iuran',
-            'icon'  => 'money-bill'
-          ],
+          // [
+          //   'name'  => 'Iuran',
+          //   'url'   => 'iuran',
+          //   'icon'  => 'money-bill'
+          // ],
         ],
       ],
     ];
@@ -132,7 +132,7 @@
     <nav class="mt-2">
       <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
         <li class="nav-item {{ request()->segment(1) == 'timeline' ? 'menu-open' : '' }}">
-          <a href="{{ URL::to('/') . '/' . 'timeline' }}" class="nav-link">
+          <a href="{{ URL::to('/') . '/' . 'timeline' }}" class="nav-link {{ request()->segment(1) == 'timeline' ? 'active nav-change-template' : '' }}">
             <div class="row">
               <div class="col-sm-2">
                 <i class="nav-icon fa fa-info" style="color: {{ request()->segment(1) == 'timeline' ? '#FFFFFF' : 'grey' }}"></i>
@@ -147,7 +147,7 @@
         </li>
 
         <li class="nav-item {{ request()->segment(1) == 'profile' ? 'menu-open' : '' }}">
-          <a href="{{ URL::to('/') . '/' . 'profile' }}" class="nav-link">
+          <a href="{{ URL::to('/') . '/' . 'profile' }}" class="nav-link {{ request()->segment(1) == 'profile' ? 'active nav-change-template' : '' }}">
             <div class="row">
               <div class="col-sm-2">
                 <i class="nav-icon fa fa-user" style="color: {{ request()->segment(1) == 'profile' ? '#FFFFFF' : 'grey' }}"></i>
@@ -162,7 +162,7 @@
         </li>
 
         <li class="nav-item {{ request()->segment(1) == 'dkm' ? 'menu-open' : '' }}">
-          <a href="{{ URL::to('/') . '/' . 'dkm' }}" class="nav-link">
+          <a href="{{ URL::to('/') . '/' . 'dkm' }}" class="nav-link {{ request()->segment(1) == 'dkm' ? 'active nav-change-template' : '' }}">
             <div class="row">
               <div class="col-sm-2">
                 <i class="nav-icon fa fa-moon" style="color: {{ request()->segment(1) == 'dkm' ? '#FFFFFF' : 'grey' }}"></i>

@@ -3,13 +3,16 @@
     <div class="col-sm-6">
       <button type="submit" class="btn btn-success btn-template-tambah" id="buttonExport" style="width: 100% !important;">
         <i class="mdi mdi-export"></i>
-        Export {{ $data->menu }}
+        EXPORT {{ $data->menu }}
       </button>
     </div>
   @endif
   @if(data_get($data, 'show_refresh', false))
     <div class="col-sm-6">
-      <button id="refreshTable" class="btn btn-primary align-items-center" style="width: 100% !important; gap: 5px;">Refresh<i class="fa fa-recycle"></i></button>
+      <button id="refreshTable" class="btn btn-primary align-items-center" style="width: 100% !important; gap: 5px;">
+        <i class="fa fa-recycle"></i>
+        Refresh
+      </button>
     </div>
   @endif
 </div>

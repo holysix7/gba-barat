@@ -18,4 +18,8 @@ class Rt extends Model
     public function getKetuaRt(){
         return $this->belongsTo(User::class, 'ketua_rt', 'id');
     }
+
+    public static function getFormatListOptions(){
+        return self::select('id as value', 'name as label')->get();
+    }
 }

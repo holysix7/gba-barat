@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/home', 'TimelineController@home')->name('home');
 
 Route::group(['middleware' => 'checksession'], function () {
   Route::get('/', 'Auth\LoginController@login')->name('login');
@@ -31,10 +32,7 @@ Route::group(['middleware' => 'checkauth'], function () {
 
     Route::get('/profile', 'ProfileController@index')->name('profile');
     Route::get('/profile/detail', 'ProfileController@detail')->name('profile.detail');
-
-    Route::group(['prefix' => 'rt05'], function () {
-      Route::get('/data-warga', 'DataWargaController@index')->name('rt5-data-warga');
-    });
+    Route::post('/profile/detail/create', 'ProfileController@createFamily')->name('profile.detail.create');
 
     Route::post('/data-warga/get-list', 'DataWargaController@getList')->name('data-warga.get-list');
     Route::post('/data-warga/export', 'DataWargaController@export')->name('data-warga.export');
@@ -52,6 +50,8 @@ Route::group(['middleware' => 'checkauth'], function () {
       Route::get('/data-warga', 'DataWargaController@index')->name('rw-data-warga');
       Route::get('/iuran-rt', 'IuranRtController@index')->name('iuran-rt');
       Route::post('/iuran-rt', 'IuranRtController@bayar')->name('iuran-rt');
+      Route::post('/iuran-rt/update', 'IuranRtController@update')->name('iuran-rt.update');
+      Route::post('/iuran-rt/create', 'IuranRtController@create')->name('iuran-rt.create');
       Route::get('/laporan-keuangan', 'LaporanKeuanganController@index')->name('rw-laporan-keuangan');
     });
     Route::group(['prefix' => 'rt01'], function () {
@@ -75,9 +75,8 @@ Route::group(['middleware' => 'checkauth'], function () {
       Route::get('/iuran', 'IuranController@index')->name('rt5-iuran');
     });
 
-    Route::get('/timeline', 'DashboardController@index')->name('timeline');
-    Route::post('/dashboard/lsbu', 'DashboardController@lsbu')->name('dashboard.lsbu');
-    Route::get('/dashboard/mygoals', 'DashboardController@mygoals')->name('dashboard.mygoals');
+    Route::get('/timeline', 'TimelineController@index')->name('timeline');
+    Route::post('/timeline', 'TimelineController@getInfoWarga')->name('info-warga');
     Route::get('/logout', 'Auth\LoginController@logout')->name('logout');
     
         Route::get('/daftar-rekening', 'Autodebit\MyGoals\DaftarRekeningController@index')->name('autodebit.mygoals.daftar-rekening');

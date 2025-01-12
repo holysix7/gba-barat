@@ -27,6 +27,7 @@ class CreateUsersTable extends Migration
             $table->date('tgl_lahir')->nullable();
             $table->string('no_kk')->nullable();
             $table->string('jenis_kelamin')->nullable();
+            $table->string('status_ktp')->nullable();
         });
     }
 

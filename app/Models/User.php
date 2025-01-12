@@ -153,6 +153,17 @@ class User extends Model
         $data   = [];
         $no     = 1;
         foreach($warga as $index => $row){
+            if(data_get($row, 'address.name')){
+                $address = data_get($row, 'address.name');
+                if(data_get($row, 'address.status_rumah')){
+                    $address .= ' ('. data_get($row, 'address.status_rumah') .')';
+                }
+            }else{
+                $address = data_get($row, 'user.address.name');
+                if(data_get($row, 'user.address.status_rumah')){
+                    $address .= ' ('. data_get($row, 'user.address.status_rumah') .')';
+                }
+            }
             $data[$index] = [
                 'no'              => $no,
                 'rt'              => data_get($row, 'rt.name', data_get($row, 'user.rt.name')),
@@ -161,8 +172,9 @@ class User extends Model
                 'name'            => $row->name,
                 'tgl_lahir'       => data_get($row, 'tgl_lahir'),
                 'jenis_kelamin'   => data_get($row, 'jenis_kelamin'),
-                'address'         => data_get($row, 'address.name', data_get($row, 'user.address.name')),
+                'address'         => $address,
                 'no_telp'         => data_get($row, 'no_telp'),
+                'status_ktp'      => data_get($row, 'status_ktp'),
                 'families'        => []
             ];
             $no++;
@@ -177,8 +189,9 @@ class User extends Model
                         'name'            => $family->name,
                         'tgl_lahir'       => data_get($family, 'tgl_lahir'),
                         'jenis_kelamin'   => data_get($family, 'jenis_kelamin'),
-                        'address'         => data_get($row, 'address.name', data_get($row, 'user.address.name')),
+                        'address'         => $address,
                         'no_telp'         => data_get($family, 'no_telp', '-'),
+                        'status_ktp'      => data_get($row, 'status_ktp'),
                     ];
                     $no_families++;
                 }

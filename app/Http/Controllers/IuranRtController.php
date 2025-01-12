@@ -39,41 +39,52 @@ class IuranRtController extends Controller
         return Excel::download(new IuranRtExport($request), 'Iuran-'. date("Ymd-his") .'.xlsx');
     }
 
-
     public function bayar(Request $request)
     {
         $values = json_decode($request->values);
-        $iuran = null;
-
         try {
-            DB::beginTransaction();
-
-            // Update tagihan
-            $iuran = IuranRt::getRow($values);
-
-            if (!$iuran) {
-                throw new \Exception("Data Iuran tidak ditemukan.");
-            }
-
-            $iuran->status_bayar = true;
-            $iuran->save();
-
-            // Update keuangan rw dan laporan keuangan
-            $laporan_keuangan = RwTransaction::transaction($iuran, 'debit');
-            if (!$laporan_keuangan) {
-                throw new \Exception("Gagal memperbarui laporan keuangan.");
-            }
-
-            DB::commit();
-
+            $iuran  = IuranRt::bayarRow($values);
+            
             return redirect()->route('iuran-rt')->with([
                 'message' => "Sukses merubah status bayar {$iuran->rt->name} untuk periode bulan {$iuran->bulan} tahun {$iuran->tahun}",
                 'alert-type' => "success"
             ]);
+
         } catch (\Exception $e) {
-            DB::rollBack();
             return redirect()->route('iuran-rt')->with([
                 'message' => "Terjadi kesalahan: " . $e->getMessage(),
+                'alert-type' => "error"
+            ]);
+        }
+    }
+
+    public function create(Request $request){
+        try {
+            $iuran      = IuranRt::createRow($request);
+            $rt_name    = data_get($iuran, 'rt.name');
+            return redirect()->back()->with([
+                'message' => "Sukses menambahkan tagihan baru untuk: {$rt_name}",
+                'alert-type' => "success"
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->with([
+                'message' => "Terjadi kesalahan: ". $e->getMessage(),
+                'alert-type' => "error"
+            ]);
+        }
+    }
+
+    public function update(Request $request){
+        $iuran      = IuranRt::updateById($request);
+        if(!is_null($iuran)){
+            $rt_name    = data_get($iuran, 'rt.name');
+            return redirect()->back()->with([
+                'message' => "Sukses merubah tagihan untuk {$rt_name}",
+                'alert-type' => "success"
+            ]);
+        }else{
+            return redirect()->back()->with([
+                'message' => "Tagihan wajib diisi",
                 'alert-type' => "error"
             ]);
         }

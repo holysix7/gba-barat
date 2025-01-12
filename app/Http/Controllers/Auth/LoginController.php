@@ -49,7 +49,7 @@ class LoginController extends Controller
             'role' => $role,
         ]);
 
-        return redirect()->route('dashboard')->with([
+        return redirect()->route('timeline')->with([
             'message'       => '<b>Selamat datang '. session('user')->nama .'</b>',
             'alert-type'    => 'success'
         ]);

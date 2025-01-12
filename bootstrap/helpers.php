@@ -132,35 +132,6 @@ function getRupiah($nominal, $satuan = true, $kurungNegatif = false){
     return ($satuan ? 'Rp ' : '') . number_format(ceil($nominal), 0, ',', '.');
 }
 
-function userActivities($action, $description, $table, $type, $route){
-    $record = new UserActivity();
-    $record->cua_id         = generateRandomString(25);
-    $record->cua_act        = $action;
-    $record->cua_desc       = $description . ' table ' . $table;
-    $record->cua_status     = '0000';
-    $record->cua_by_uid     = Session::get('user')->userId;
-    $record->cua_dt         = date('Y-m-d H:i:s');
-    $record->cua_session    = Session::get('_token');
-    $record->cua_ip         = Request::getClientIp();
-    $record->cua_user_agent = Browser::browserFamily();
-    $record->cua_act_id     = $route;
-    $record->cua_type       = $type;
-    $record->branch_code    = Session::get('user')->kodeCabang;
-
-    if($record->save()){
-        $rc = 200;
-        $message = 'Save log success...';
-    }else{
-        $rc = 400;
-        $message = 'Save log failed...';
-    }
-
-    return response()->json([
-        'rc'        => $rc,
-        'message'   => $message
-    ], $rc);
-}
-
 function getMonths(){
     $months = [
         'Januari',
@@ -180,8 +151,105 @@ function getMonths(){
     return $months;
 }
 
+function getMonthsValue(){
+    return [
+        [
+          'label'  => 'Januari',
+          'value' => '1'
+        ],
+        [
+          'label'  => 'Februari',
+          'value' => '2'
+        ],
+        [
+          'label'  => 'Maret',
+          'value' => '3'
+        ],
+        [
+          'label'  => 'April',
+          'value' => '4'
+        ],
+        [
+          'label'  => 'Mei',
+          'value' => '5'
+        ],
+        [
+          'label'  => 'Juni',
+          'value' => '6'
+        ],
+        [
+          'label'  => 'Juli',
+          'value' => '7'
+        ],
+        [
+          'label'  => 'Agustus',
+          'value' => '8'
+        ],
+        [
+          'label'  => 'September',
+          'value' => '9'
+        ],
+        [
+          'label'  => 'Oktober',
+          'value' => '10'
+        ],
+        [
+          'label'  => 'November',
+          'value' => '11'
+        ],
+        [
+          'label'  => 'Desember',
+          'value' => '12'
+        ],
+    ];
+}
+
+function getYearsValue(){
+    return [
+        [
+            'label' => '2025',
+            'value' => '2025',
+        ],
+        [
+            'label' => '2026',
+            'value' => '2026',
+        ],
+    ];
+}
+
+function getJenisKelaminValue(){
+    return [
+        [
+            'label' => 'Laki-laki',
+            'value' => 'Laki-laki',
+        ],
+        [
+            'label' => 'Perempuan',
+            'value' => 'Perempuan',
+        ],
+    ];
+}
+
 function isUserPusat($value){
     $userPusat = [1280, 1788, 1787, 1789, 1785];
     $result = in_array($value, $userPusat);
     return $result;
+}
+
+function dateFormat($original_date){
+    return date("d-m-Y", strtotime($original_date));
+}
+
+function getUserLogin(){
+    $user = session('user');
+    return $user;
+}
+
+function getUserLoginId(){
+    $user = session('user');
+    return $user->id;
+}
+
+function formatStringToNominal($value){
+    return str_replace('.', '', $value);
 }

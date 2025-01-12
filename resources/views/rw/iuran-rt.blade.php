@@ -7,7 +7,7 @@
     $now_month  = data_get($data, 'now_month');
     $filter     = [
       'month' => $months[0]['value'],
-      'year'  => $years[0]
+      'year'  => $years[0]['value']
     ];
   ?>
   <div class="row" style="padding-bottom: 10px;">
@@ -16,14 +16,14 @@
     <div class="col-md-2">
       <select id="monthId" class="form-control">
         @foreach($months as $month)
-          <option value="{{ $month['value'] }}" {{$month['value'] === $now_month ? 'selected' : ''}}>{{ $month['name'] }}</option>
+          <option value="{{ $month['value'] }}" {{$month['value'] === $now_month ? 'selected' : ''}}>{{ $month['label'] }}</option>
         @endforeach
       </select>
     </div>
     <div class="col-md-2">
       <select id="yearId" class="form-control">
         @foreach($years as $year)
-          <option value="{{ $year }}">{{ $year }}</option>
+          <option value="{{ $year['value'] }}">{{ $year['label'] }}</option>
         @endforeach
       </select>
     </div>
@@ -37,7 +37,7 @@
 <script type="text/javascript">
   var filter = {
     month: '{{$months[0]["value"]}}',
-    year: '{{$years[0]}}'
+    year: '{{$years[0]["value"]}}'
   }
   const filterString = JSON.stringify(filter);
   $('#filterExport').val(filterString)

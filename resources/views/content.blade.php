@@ -24,7 +24,7 @@
             </b>
           </h4>
         </div>
-        @if(request()->segment(2))
+        @if(request()->segment(2) === 'detail')
           <div class="col-md-6">
             <div class="row" style="flex-direction: row-reverse;">
               <div class="col-md-4">
@@ -45,6 +45,14 @@
             <section class="content">
               <div class="container-fluid">
                 <div class="row d-flex justify-content-end" style="padding-top: 10px;">
+                  @if(request()->segment(2) === 'iuran-rt' || request()->segment(2) === 'detail')
+                    <div class="col-sm-6">
+                      <a href="javascript:void(0)" id="buttonTambah" class="btn btn-primary-outline btn-template-tambah">
+                        <i class="fa fa-plus"></i>
+                        TAMBAH {{ request()->segment(2) ? strtoupper($data->menu) : strtoupper(request()->segment(1)) }}
+                      </a>
+                    </div>
+                  @endif
                   <div class="col-sm-6">
                     @include('content-header', compact('data'))
                   </div>
@@ -64,34 +72,8 @@
     </div>
   </section>
     
-  <div class="modal fade" id="infoModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h4 class="modal-title" id="modalTitle">
-          </h4>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="containerForm">
-          <table id="fikri-request-detail" class="table table-bordered table-striped">
-          </table>
-        </div>
-        @if($data->menu === 'Iuran RT')
-          <div class="modal-footer">
-            <form action="{{ route('iuran-rt') }}" method="POST">
-              @csrf
-              <input id="idParseValue" name="values" type="hidden">
-              <a href="javascript:void(0)" id="btnId" class="btn btn-primary">
-                Bayar
-              </a>
-            </form>
-          </div>
-        @endif
-      </div>
-    </div>
-  </div>
+  @include('layouts.modal')  
+
 @endsection
 
 @push('script')
@@ -107,6 +89,11 @@
       $('#buttonExport').on('click', function(){
         $('#exportPopUp').modal('show')
       })
+
+      $('#buttonTambah').on('click', function(){
+        $('#tambahPopUp').modal('show')
+      })
+
       $('#btnId').on('click', function(e){
         e.preventDefault();
         const isConfirmed = confirm('Apakah Anda yakin?');
@@ -119,6 +106,37 @@
         loadingData()
       });
     })
+
+    function openDetailForm(row){
+      row = JSON.parse(decodeURIComponent(row)); 
+      $('#infoModalForm').modal('show');
+      $('#modalTitleForm').html(`Edit`);
+      $('#readonlyForm').html('');
+      const keys = Object.keys(row);
+      var html = '';
+      const newTagihan = row.tagihan.replaceAll('Rp ', '');
+      console.log(newTagihan)
+      for(let i = 0; i < keys.length; i++){
+        if(keys[i] === 'rt_id' || keys[i] === 'tagihan'){
+          const test = keys.splice(i, 1);
+        }
+        html += `<div class="col-md-12 d-flex justify-content-between form-border">
+          <label style="font-weight: bold;">${keys[i].replaceAll('_', ' ').toUpperCase()}</label>
+          <label>${row[keys[i]]}</label>
+        </div>`
+      }
+      if(row.tagihan){
+        html += `<div class="col-md-12 d-flex justify-content-between align-items-center form-border">
+          <label style="font-weight: bold;">Tagihan</label>
+          <div>
+            <input type="hidden" name="id" value="${row.id}" class="form-control">
+            <input name="tagihan" value="${newTagihan}" class="form-control uangMasking" required>
+          </div>
+        </div>`
+      }
+      $('#readonlyForm').html(html);
+      maskingInput()
+    }
 
     function openDetail(rows){
       rows = JSON.parse(decodeURIComponent(rows)); 
@@ -230,7 +248,15 @@
                 @endif
                 @if ($column['title'] === 'Aksi')
                     mRender: function(data, type, row) {
-                      return `<a href="javascript:void(0)" class="button-action" style='font-size: 28px;' title='Lihat Detail' onclick="openDetail('${encodeURIComponent(JSON.stringify(row.families))}')"><i class="mdi mdi-eye"></i></a>`;
+                      if(row.families){
+                        return `<a href="javascript:void(0)" class="button-action" style='font-size: 20px;' title='Lihat Detail' onclick="openDetail('${encodeURIComponent(JSON.stringify(row.families))}')"><i class="mdi mdi-eye"></i></a>`;
+                      }else{
+                        let eventClick = `openDetailForm('${encodeURIComponent(JSON.stringify(row))}')`;
+                        if(row.status_bayar === 'Sudah Bayar'){
+                          eventClick = `alert('${row.rt} sudah melakukan transaksi, tidak dapat merubah data!')`;
+                        }
+                        return `<a href="javascript:void(0)" class="button-action" style='font-size: 20px;' title='Lihat Detail' onclick="${eventClick}"><i class="fa fa-edit"></i></a>`;
+                      }
                     }
                 @endif
             },

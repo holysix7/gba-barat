@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\DataWargaExport;
+use App\Exports\LaporanKeuanganExport;
 use App\Http\Traits\GetListTrait;
-use App\Models\Keuangan;
 use App\Models\RwTransaction;
-use App\Models\User;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -31,6 +29,6 @@ class LaporanKeuanganController extends Controller
     }
 
     public function export(Request $request){
-        return Excel::download(new DataWargaExport($request), 'Laporan-Keuangan-'. date("Ymd-his") .'.xlsx');
+        return Excel::download(new LaporanKeuanganExport($request), 'Laporan-Keuangan-'. date("Ymd-his") .'.xlsx');
     }
 }

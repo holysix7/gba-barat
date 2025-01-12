@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Traits;
 
+use App\Models\Rt;
 use App\Models\User;
 use Illuminate\Support\Facades\Session;
 
@@ -54,7 +55,7 @@ trait GetListTrait
     $user = User::where('id', $session_user->id)
     ->with(['auth.role', 'address', 'families' => function ($query) {
         $query->orderBy('tgl_lahir', 'asc');
-    },])
+    }])
     ->first();
     $data = [
         [
@@ -77,9 +78,37 @@ trait GetListTrait
     return (object)[
       'menu'          => 'Detail',
       'endpoint'      => route('data-warga.get-list'),
+      'create'        => route('profile.detail.create'),
       'redirect_back' => route('profile'),
       'user'          => $user,
       'families'      => $data,
+      'create_fields' => [
+        [
+          'label' => 'Nama',
+          'name' => 'name',
+          'type' => 'text',
+          'add_class' => '',
+        ],
+        [
+          'label' => 'No Telepon',
+          'name' => 'no_telp',
+          'type' => 'text',
+          'add_class' => '',
+        ],
+        [
+          'label' => 'Tanggal Lahir',
+          'name' => 'tgl_lahir',
+          'type' => 'date',
+          'add_class' => '',
+        ],
+        [
+          'label' => 'Jenis Kelamin',
+          'name' => 'jenis_kelamin',
+          'type' => 'select',
+          'add_class' => '',
+          'options' => getJenisKelaminValue(),
+        ],
+      ],
     ];
   }
 
@@ -125,14 +154,19 @@ trait GetListTrait
               "width"   => "8%"
           ],
           [
+            "title"   => "Nomor Telepon (WA)",
+            "data"    => 'no_telp',
+            "width"   => "8%"
+          ],
+          [
               "title"   => "Alamat",
               "data"    => "address",
               "width"   => "15%"
           ],
           [
-              "title"   => "Nomor Telepon (WA)",
-              "data"    => 'no_telp',
-              "width"   => "8%"
+            "title"   => "Status KTP",
+            "data"    => "status_ktp",
+            "width"   => "10%"
           ],
           [
               "title"   => "Aksi",
@@ -191,8 +225,45 @@ trait GetListTrait
       'menu'      => 'Iuran RT',
       'export'    => route('iuran-rt.export'),
       'endpoint'  => route('iuran-rt.get-list'),
+      'update'    => route('iuran-rt.update'),
+      'create'    => route('iuran-rt.create'),
       'now_month' => date('m'),
       'show_refresh' => true,
+      'create_fields' => [
+        [
+          'label' => 'Nama Iuran',
+          'name' => 'name',
+          'type' => 'text',
+          'add_class' => ''
+        ],
+        [
+          'label' => 'Tagihan',
+          'name' => 'nominal',
+          'type' => 'text',
+          'add_class' => 'uangMasking'
+        ],
+        [
+          'label' => 'RT',
+          'name' => 'rt_id',
+          'type' => 'select',
+          'options' => Rt::getFormatListOptions(),
+          'add_class' => ''
+        ],
+        [
+          'label' => 'Bulan',
+          'name' => 'bulan',
+          'type' => 'select',
+          'options' => getMonthsValue(),
+          'add_class' => ''
+        ],
+        [
+          'label' => 'Tahun',
+          'name' => 'tahun',
+          'type' => 'select',
+          'options' => getYearsValue(),
+          'add_class' => ''
+        ],
+      ],
       'columns'   => [
         [
             "title"   => "No",
@@ -207,71 +278,37 @@ trait GetListTrait
         [
             "title"   => "Ketua RT",
             "data"    => 'ketua_rt',
-            "width"   => "20%",
+            "width"   => "15%",
+        ],
+        [
+            "title"   => "Deskripsi",
+            "data"    => 'name',
         ],
         [
             "title"   => "Tagihan",
             "data"    => 'tagihan',
-            "width"   => "10%",
+            "width"   => "12%",
             "className" => 'text-right'
-          ],
+        ],
         [
           "title"   => "Status Bayar",
           "data"    => 'status_bayar',
           "width"   => "10%",
         ],
-      ],
-      'months'  => [
         [
-          'name'  => 'Januari',
-          'value' => '1'
+          "title"   => "Tanggal Bayar",
+          "data"    => 'tanggal_bayar',
+          "width"   => "12%",
         ],
         [
-          'name'  => 'Februari',
-          'value' => '2'
-        ],
-        [
-          'name'  => 'Maret',
-          'value' => '3'
-        ],
-        [
-          'name'  => 'April',
-          'value' => '4'
-        ],
-        [
-          'name'  => 'Mei',
-          'value' => '5'
-        ],
-        [
-          'name'  => 'Juni',
-          'value' => '6'
-        ],
-        [
-          'name'  => 'Juli',
-          'value' => '7'
-        ],
-        [
-          'name'  => 'Agustus',
-          'value' => '8'
-        ],
-        [
-          'name'  => 'September',
-          'value' => '9'
-        ],
-        [
-          'name'  => 'Oktober',
-          'value' => '10'
-        ],
-        [
-          'name'  => 'November',
-          'value' => '11'
-        ],
-        [
-          'name'  => 'Desember',
-          'value' => '12'
+            "title"   => "Aksi",
+            "width"   => "5%",
+            "className" => 'text-center',
+            "data"    => 'rt',
         ],
       ],
-      'years' => ['2025', '2026']
+      'months'  => getMonthsValue(),
+      'years' => getYearsValue()
     ];
   }
 }
